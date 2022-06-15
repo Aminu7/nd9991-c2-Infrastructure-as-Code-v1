@@ -18,7 +18,7 @@ Parameters:
         Type: String
         Default: 10.0.0.0/24
 
-    PublicSubnet2CIDR:
+    PrivateSubnet1CIDR:
         Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
         Type: String
         Default: 10.0.1.0/24
@@ -32,7 +32,7 @@ Resources:
             Tags: 
                 - Key: Name 
                   Value: !Ref EnvironmentName
-                  
+
     InternetGateway:
         Type: AWS::EC2::InternetGateway
         Properties:
@@ -45,3 +45,14 @@ Resources:
         Properties:
             InternetGatewayId: !Ref InternetGateway
             VpcId: !Ref VPC
+
+    PublicSubnet1: 
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 0, !GetAZs '' ]
+            CidrBlock: 10.0.0.0/24
+            MapPublicIpOnLaunch: true
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
