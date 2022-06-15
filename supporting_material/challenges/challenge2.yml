@@ -22,7 +22,7 @@ Parameters:
         Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
         Type: String
         Default: 10.0.1.0/24
-        
+
 Resources:
     VPC: 
         Type: AWS::EC2::VPC
@@ -32,3 +32,16 @@ Resources:
             Tags: 
                 - Key: Name 
                   Value: !Ref EnvironmentName
+                  
+    InternetGateway:
+        Type: AWS::EC2::InternetGateway
+        Properties:
+            Tags:
+                - Key: Name
+                  Value: !Ref EnvironmentName
+            
+    InternetGatewayAttachment:
+        Type: AWS::EC2::VPCGatewayAttachment
+        Properties:
+            InternetGatewayId: !Ref InternetGateway
+            VpcId: !Ref VPC
